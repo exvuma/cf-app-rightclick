@@ -57,9 +57,13 @@ function Menu(options) {
   this.el = document.createElement('div')
   // set absolute pos
   this.el.style.position = 'absolute'
+  this.el.className = "cf-menu";
   //set HTML of what's going to show up
-
-  this.el.innerHTML = 'helllo menu'
+  this.el.innerHTML = `<ul>
+    <li><a href="https://victoriabernard.com"> Me Site</a></li>
+    <li><a href="https://google.com">Google</a></li>
+    <li><a href="#">Link 3</a></li>
+  </ul>`
 
 }
 Menu.prototype.displayAt = function(x, y) {
