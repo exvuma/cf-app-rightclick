@@ -1,0 +1,24 @@
+{
+  "preview": {
+    "handlers": [
+      {
+        "options": ["*"],
+        "execute": "INSTALL_SCOPE.setOptions(INSTALL_OPTIONS)"
+      }
+    ]
+  }
+  "options": {
+      "default": "option-a",
+      "format": "radios",
+      "title": "Radios Example",
+      "type": "string",
+      "enum": [
+        "option-a",
+        "option-b"
+      ],
+      "enumNames": {
+        "option-a": "Option A",
+        "option-b": "Option B"
+      }
+    }
+}

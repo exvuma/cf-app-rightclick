@@ -1,0 +1,8 @@
+.context-menu {
+  position: absolute;
+  z-index: 1000000000;
+}
+
+.context-menu--active {
+  display: block;
+}
