@@ -1,4 +1,12 @@
 {
+  "resources": {
+    "head": [
+      {
+        "type": "script",
+        "src": "./right-click.js"
+      }
+    ]
+  },
   "preview": {
     "handlers": [
       {
@@ -6,19 +14,68 @@
         "execute": "INSTALL_SCOPE.setOptions(INSTALL_OPTIONS)"
       }
     ]
-  }
+  },
   "options": {
-      "default": "option-a",
-      "format": "radios",
-      "title": "Radios Example",
-      "type": "string",
-      "enum": [
-        "option-a",
-        "option-b"
-      ],
-      "enumNames": {
-        "option-a": "Option A",
-        "option-b": "Option B"
+    "properties": {
+      "title": {
+        "title": "Title",
+        "type": "string",
+        "default": "App title"
+      },
+      "text": {
+        "title": "Description",
+        "type": "string",
+        "format": "textarea",
+        "default": "This app will allow you to right click and.."
+      },
+      "enabled": {
+        "title": "Enabled",
+        "type": "boolean",
+        "default": true
+      },
+      "links": {
+        "title": "Links",
+        "type": "object",
+        "properties": {
+          "Link1": {
+            "title": "Link 1",
+            "type": "object",
+            "properties": {
+              "enabled": {
+                "title": "Show",
+                "type": "boolean"
+              },
+              "linkaddr": {
+                "title": "URL of Link",
+                "type": "string",
+                "showIf": {
+                  "links.Link1.enabled": true
+                }
+              },
+              "displaytxt": {
+                "title": "Display of Link",
+                "type": "string",
+                "showIf": {
+                  "links.Link1.enabled": true
+                }
+              }
+            }
+          }
+        }
+      },
+  "size": {
+        "title": "Size",
+        "type": "string",
+        "enum": [
+          "small",
+          "medium"
+        ],
+        "enumNames": {
+          "small": "Small",
+          "medium": "Medium"
+        },
+        "default": "small"
       }
-    }
+
+}}
 }
