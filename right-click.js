@@ -14,13 +14,24 @@
   else{ // Just for when we are development mode from browser to simulate
       var options = {
                     "title": "App title",
-                    "text": "This app will allow you to right click and..",
+                    "bold": true,
+                    "text": "Select the links you'd like to be able to appear in the menu",
                     "enabled": true,
                     "links": {
                       "Link1": {
-                        "enabled": true,
-                        "linkaddr": "https://google.com",
-                        "displaytxt": "Dev "
+                        "enabled": false,
+                        "linkaddr": "",
+                        "displaytxt": ""
+                      },
+                      "Link2": {
+                        "enabled": false,
+                        "linkaddr": "",
+                        "displaytxt": ""
+                      },
+                      "Link3": {
+                        "enabled": false,
+                        "linkaddr": "",
+                        "displaytxt": ""
                       }
                     },
                     "size": "small"
@@ -46,31 +57,12 @@
     }
   }
 
-  function homie(){
-    if (document.activeElement) {
-        if(typeof textarea.selectionStart == 'number' && typeof textarea.selectionEnd == 'number') {
-            // All browsers except IE
-            var start = textarea.selectionStart;
-            var end = textarea.selectionEnd;
+  function boldSelection(){
+    var currSelection = window.getSelection()
+    currSelection.baseNode.parentElement.innerHTML = currSelection.baseNode.parentElement.innerHTML.replace(currSelection.getRangeAt(0).toString(), `<strong>${currSelection.getRangeAt(0).toString()}</strong>`)
 
-            var selectedText = textarea.value.slice(start, end);
-            var before = textarea.value.slice(0, start);
-            var after = textarea.value.slice(end);
-            console.log("Why hello" +selectedText +  "selected")
-            var text = before + '- ' + selectedText + after;
-            textarea.value = text;
-       }
-   }
   }
-  //
 
-  // window.INSTALL_SCOPE = {
-  //   setOptions: function (nextOptions) {
-  //     options = nextOptions
-  //
-  //     updateElement()
-  //   }
-  // }
 
   var currMenu ;
   document.addEventListener('select', function() {
@@ -79,7 +71,6 @@
   function updateMenu(e){ //function e sam a e =>
   // Prevents right vlick from default from opening
     e.preventDefault();
-
     if (currMenu){
       //close menu
       currMenu.close();
@@ -96,17 +87,20 @@
   document.addEventListener('click', function(e) {
     // create new Menu class..
     if (currMenu){
+      //if user clicked on the menu, get that item
+      var pos = currMenu.getPosition(e)
       //close menu
       currMenu.close();
       currMenu = undefined
     }
+    boldSelection();
   })
   document.addEventListener('contextmenu', function(e) { //function e sam a e =>
   // Prevents right vlick from default from opening
     e.preventDefault();
+    //close menu if no text is selected
+    if (currMenu){ //TODO check text selected
 
-    if (currMenu){
-      //close menu
       currMenu.close();
     }
     updateElement()
@@ -118,16 +112,6 @@
 
   // Custom code here
   })
-  // any click make menu disappear
-  document.addEventListener('click', function(e) {
-    // create new Menu class..
-    if (currMenu){
-      //close menu
-      currMenu.close();
-      currMenu = undefined
-    }
-  })
-
 
 
 function Menu(options) {
@@ -137,14 +121,35 @@ function Menu(options) {
   // set absolute pos
   this.el.style.position = 'absolute'
   this.el.className = "cf-menu";
-  var link1 =  Right_Click.options.links.Link1.linkaddr
-  var title1 = Right_Click.options.links.Link1.displaytxt //options.links.Link1.linkaddr
-  //set HTML of what's going to show up
-  this.el.innerHTML = `<ul>
-    <li><a href="` + link1 + `"> `+title1+`</a></li>
-    <li><a href="`+link1+`">Google</a></li>
-    <li><a href="#">Link 3</a></li>
-  </ul>`
+  //Push all enabled options into arr
+  var arr = []
+  for(key in Right_Click.options)
+  {
+    if(Right_Click.options[key]){
+      arr.push(key)
+    }
+    console.log(Right_Click.options[key])
+  }
+  //For each item in the arr display approriate item in menu
+  var menuHTMLString = "<ul>"
+  for(var item in arr){
+    menuHTMLString += `<li>` + arr[item] + `</li>`
+  }
+  menuHTMLString += `</ul>`
+  this.el.innerHTML = menuHTMLString
+  // var link1 =  Right_Click.options.links.Link1.linkaddr
+  // var link2 =  Right_Click.options.links.Link2.linkaddr
+  // var link3 =  Right_Click.options.links.Link3.linkaddr
+  // var title1 =  Right_Click.options.links.Link1.displaytxt
+  // var title2  =  Right_Click.options.links.Link2.displaytxt
+  // var title3 =  Right_Click.options.links.Link3.displaytxt //options.links.Link1.linkaddr
+  // //set HTML of the display Menut to
+  // this.el.innerHTML = `<ul>
+  //   <li><a href="` + link1 + `"> `+title1+`</a></li>
+  //   <li><a href="`+link2+`">`+ title2 + `</a></li>
+  //   <li><a href="`+link3+`">`+title3 + `</a></li>
+  // </ul>`
+
 
 }
 Menu.prototype.displayAt = function(x, y) {
