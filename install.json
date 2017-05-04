@@ -17,118 +17,33 @@
   },
   "options": {
     "properties": {
-      "title": {
-        "title": "Title",
-        "type": "string",
-        "default": "App title"
-      },
-      "bold": {
-        "title": "Bold",
-        "type": "boolean",
-        "default": false
-      },
-      "text": {
-        "title": "Description",
-        "type": "string",
-        "format": "textarea",
-        "default": "Select the links you'd like to be able to appear in the menu"
-      },
-      "enabled": {
-        "title": "Enabled",
-        "type": "boolean",
-        "default": true
-      },
-      "links": {
-        "title": "Links",
+
+      "modifiers":{
         "type": "object",
-        "properties": {
-          "Link1": {
-            "title": "Link 1",
-            "type": "object",
-            "properties": {
-              "enabled": {
-                "title": "Show",
-                "type": "boolean"
-              },
-              "linkaddr": {
-                "title": "URL of Link",
-                "type": "string",
-                "showIf": {
-                  "links.Link1.enabled": true
-                }
-              },
-              "displaytxt": {
-                "title": "Display of Link",
-                "type": "string",
-                "showIf": {
-                  "links.Link1.enabled": true
-                }
-              }
-            }
-          },
-          "Link2": {
-            "title": "Link 2",
-            "type": "object",
-            "properties": {
-              "enabled": {
-                "title": "Show",
-                "type": "boolean"
-              },
-              "linkaddr": {
-                "title": "URL of Link",
-                "type": "string",
-                "showIf": {
-                  "links.Link2.enabled": true
-                }
-              },
-              "displaytxt": {
-                "title": "Display of Link",
-                "type": "string",
-                "showIf": {
-                  "links.Link2.enabled": true
-                }
-              }
-            }
-          },
-          "Link3": {
-            "title": "Link 3",
-            "type": "object",
-            "properties": {
-              "enabled": {
-                "title": "Show",
-                "type": "boolean"
-              },
-              "linkaddr": {
-                "title": "URL of Link",
-                "type": "string",
-                "showIf": {
-                  "links.Link3.enabled": true
-                }
-              },
-              "displaytxt": {
-                "title": "Display of Link",
-                "type": "string",
-                "showIf": {
-                  "links.Link3.enabled": true
-                }
-              }
+        "title": "Tools to Include",
+        "properties":{
+            "bold": {
+              "title": "Bold",
+              "type": "boolean",
+              "default": false
+            },
+            "highlight": {
+              "title": "Hightlight",
+              "type": "boolean",
+              "default": false
+            },
+            "italize": {
+              "title": "Italize",
+              "type": "boolean",
+              "default": false
+            },
+            "code": {
+              "title": "Code Formatter",
+              "type": "boolean",
+              "default": false
             }
           }
         }
-      },
-  "size": {
-        "title": "Size",
-        "type": "string",
-        "enum": [
-          "small",
-          "medium"
-        ],
-        "enumNames": {
-          "small": "Small",
-          "medium": "Medium"
-        },
-        "default": "small"
       }
-
-}}
+    }
 }
