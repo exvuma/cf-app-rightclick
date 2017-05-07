@@ -31,22 +31,22 @@
         "type": "object",
         "title": "Tools to Include",
         "properties":{
-            "bold": {
+            "cf-bold": {
               "title": "Bold",
               "type": "boolean",
               "default": false
             },
-            "highlight": {
+            "cf-highlight": {
               "title": "Hightlight",
               "type": "boolean",
               "default": false
             },
-            "format_italic": {
+            "cf-italic": {
               "title": "Italic",
               "type": "boolean",
               "default": false
             },
-            "code": {
+            "cf-code": {
               "title": "Code Formatter",
               "type": "boolean",
               "default": false

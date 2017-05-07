@@ -7,6 +7,7 @@
 }*/
 @import "https://fonts.googleapis.com/icon?family=Material+Icons";
 @import"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js";
+@import "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css";
 .cf-menu {
   position: absolute;
   z-index: 1000000000;
@@ -37,7 +38,32 @@
   background-color: inherit;
 }
 .left-click{
-  background-color: #4CAF50;
+  font-weight: bold;;
+}
+.cf-selection.bold-class{
+  font-weight: bold;
+  margin:0;
+  padding:0;
+}
+.cf-bold{font-weight: bold;}
+.cf-code{font-weight: bold;}
+.cf-italic{font-style: italic;}
+.cf-highlight{  background-color: #4CAF50;}
+button.btn.btn-info{
+  color:red;
+}
+
+button.btn.btn-info:active{
+  color:brown;
+}
+button.btn.btn-info[active = true]{
+
+   /*.btn-group-vertical>.btn.active, .btn-group-vertical>.btn:active, .btn-group-vertical>.btn:focus, .btn-group-vertical>.btn:hover, .btn-group>.btn.active, .btn-group>.btn:active, .btn-group>.btn:focus, .btn-group>.btn:hover*/
+  color:yellow;
+  border-color:yellow;
+
+
+
 }
 .bold-class{
   font-weight: bold;
