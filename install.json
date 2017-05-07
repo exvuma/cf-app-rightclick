@@ -4,6 +4,10 @@
       {
         "type": "script",
         "src": "./right-click.js"
+      },
+      {
+        "type": "style",
+        "src": "./style.css"
       }
     ]
   },
@@ -17,7 +21,12 @@
   },
   "options": {
     "properties": {
-
+      "backgroundColor":{
+        "title" : "Background Color",
+        "default": "#000000",
+        "format": "color",
+        "type": "string"
+      },
       "modifiers":{
         "type": "object",
         "title": "Tools to Include",
@@ -32,8 +41,8 @@
               "type": "boolean",
               "default": false
             },
-            "italize": {
-              "title": "Italize",
+            "format_italic": {
+              "title": "Italic",
               "type": "boolean",
               "default": false
             },

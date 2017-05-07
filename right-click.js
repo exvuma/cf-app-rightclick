@@ -1,40 +1,45 @@
 (function () {
   'use strict'
-
-  // var options = INSTALL_OPTIONS
-// Executes continuously?
+  // If Browser won't be compatible
+  if (!window.addEventListener)
+        return
   var options = { window: window }
   var Right_Click = {"options": {}}
   var SelectEvent ={}
+  var currSelection
+  var formats={} //dict of formats that are enabled
+  function updateOpts(){
+      Right_Click.options = options
+       for (var key in options){// temporarily set formats var TODO change to when button is enabeld
+            if( Right_Click.options[key]){
+            formats[key] = true
+          }
+          else {
+            formats[key] = false
+          }
+        }
+  }
   if (typeof window.INSTALL_OPTIONS === 'object') {
        for (var key in INSTALL_OPTIONS) {
          options[key] = INSTALL_OPTIONS[key]
          Right_Click.options[key] = options[key]
        }
      }
-  else{ // Just for when we are development mode from browser to simulate
+    else{ // Just for when we are development mode from browser to simulate
       var options = {
+                "backgroundColor": "#FFFFFF",
                 "modifiers": {
                   "bold": true,
-                  "highlight": false,
-                  "format_italic": false,
+                  "highlight": true,
+                  "format_italic": true,
                   "code": true
                 }
               }
-    //  for( var i=0 ; i < 10; i++)
     for (var key in options)
-        // options[i] = "victoria!"
         Right_Click.options[key] = options[key]
     }
-  function toolbar() {
-    // this.el = div
-    //TODO https://www.w3schools.com/icons/tryit.asp?filename=tryicons_google-format_bold
-  }
-  function gotoLink(link){
-    // Goes to link in Menu
 
-  }
-  function updateElement () {}
+
   // call set by install.json "execute": "INSTALL_SCOPE.setOptions(INSTALL_OPTIONS)"
   // apps team provides INSTALL_OPTIONS and the excution of this function granted line aboeve is in install.json
   window.INSTALL_SCOPE = {
@@ -46,27 +51,67 @@
     }
   }
 
- function modifySelection(modifyEl, e){
-   var modifyType = modifyEl.innerHTML
-   switch(modifyType){
-       case("title"):
-         console.log("title was selected from the menu")
-         break;
-      case("bold"):
-        console.log("bold was selected from the menu")
-        boldSelection()
-        break;
-      case("text"):
-        console.log("text was selected from the menu")
-        break;
-      }
+ function setFormats(){
+ // for (var type in Right_Click.options){
+   var buttons = document.getElementsByClassName("btn btn-info")
+   for (var b in buttons){
+     console.log(buttons[b])
+     if (buttons[b].state == focus){
+       console.log(buttons[b].id)
+     }
  }
-  function boldSelection(){
-    var currSelection = window.getSelection()
-    currSelection.baseNode.parentElement.innerHTML = currSelection.baseNode.parentElement.innerHTML.replace(currSelection.getRangeAt(0).toString(), `<strong>${currSelection.getRangeAt(0).toString()}</strong>`)
 
+ }
+   //create and set and array that holds the formats we wish to set
+ function toggleFormat(format){
+   for (var type in Right_Click.options){
+     if(!formats[key]){
+        formats[key] = true
+      }
+     }
+   }
+
+function modifySelection(modifyPos, e){
+  if (!currSelection){
+    if (!SelectEvent) return
+    currSelection = SelectEvent.getSelection()
   }
+  // Check if the item has already been bolded then make it whole selection unbold
+// 3 means this is a Node of type TEXT
+  if (currSelection.anchorNode.nodeType == 3 && currSelection.anchorNode.parentElement.tagName== "STRONG"){
+    //remove the tag by just using the innerHTML
+    currSelection.anchorNode.parentElement.outerHTML = currSelection.anchorNode.parentElement.innerHTML
+    return;
+  }// if ATTRIBUTE Node Type
+  if (currSelection.anchorNode.nodeType == 2 && currSelection.anchorNode.parentElement.tagName== "STRONG"){
+    //remove the tag by just using the innerHTML
+    currSelection.anchorNode.parentElement.outerHTML = currSelection.anchorNode.parentElement.innerHTML
+    return;
+  }//if Element type
+  if (currSelection.anchorNode.nodeType == 1 && currSelection.anchorNode.parentElement.tagName== "STRONG"){}
+  //TODO: currSelection.anchorNode.getElementsByTagName("strong")
+  if (currSelection.getRangeAt(0).toString() == "")
+    return
+  currSelection.baseNode.parentElement.innerHTML = currSelection.baseNode.parentElement.innerHTML.replace(currSelection.getRangeAt(0).toString(), `<strong>${currSelection.getRangeAt(0).toString()}</strong>`)
 
+
+  // //If wanted to create a DIV to replace html..
+  // var start = currSelection.anchorOffset
+  // var end = currSelection.focusOffset
+  // var orig = currSelection.baseNode.parentElement.innerHTML
+  // var alterText = currSelection.baseNode.parentElement.innerHTML.slice(start,end)
+  // var newEl = document.createElement('div')
+  // newEl.className = "bold-class"
+  // newEl.innerHTML = alterText
+  // // currSelection.baseNode.parentElement.appendChild(newEl)
+  // if(!  currSelection.baseNode.parentElement)return
+  // currSelection.baseNode.parentElement.innerHTML = currSelection.baseNode.parentElement.innerHTML.replace(currSelection.getRangeAt(0).toString(), newEl.outerHTML)
+  // currSelection.baseNode.parentElement.innerHTML = currSelection.baseNode.parentElement.innerHTML.replace(currSelection.getRangeAt(0).toString(), `<strong>${currSelection.getRangeAt(0).toString()}</strong>`)
+  //  currSelection.baseNode.parentElement.setAttribute("class", "bold-class")
+}
+ function menuClicked(){
+   currSelection = window.getSelection()
+ }
 
   var currMenu ;
   var isSelect = false;
@@ -75,59 +120,59 @@
   ///////////    Event Listeners     //////
   //////////////////////////////////////////
   document.addEventListener('click', clickFunc)
-  // document.getElementById("cf-menu").onclick = function(){}
-  // any click make menu disappear
+  document.addEventListener('dbclick', dbClick)
+  //////////////////////////////////////////
+  ///////////   Helper Functions   //////
+  //////////////////////////////////////////
+  function closeMenu(){
+    currMenu.close();
+    currMenu = undefined
+  }
+  function dbClick(){
+    currMenu.close();
+    currMenu = undefined
+  }
   function clickFunc(e) {
-    if(window.getSelection().type == "Range" && !currMenu){ //if there's no menu displayed and we selected a range
+    setFormats()
+    if(window.getSelection().type == "Range"){ //if there's no menu displayed and we selected a range
       isSelect = true
       SelectEvent = e
     }
-    else if (currMenu) { // currMenu existed
+    else if (window.getSelection().type == "Caret") { // currMenu existed
       isSelect = false
     }
 
-    // create new Menu class..
-    if (currMenu){ //get the item on the menu
+    // Menu is already displayed
+    if ( currMenu){
+      var menuItems = document.getElementsByClassName("btn btn-info");
+      //get the item on the menu
       //if user clicked on the menu, get that item
       var pos = currMenu.getPosition(e)
-      var modifyEl = document.elementFromPoint(pos.x , pos.y);
-      modifySelection(modifyEl, e)
-      //close menu
-      currMenu.close();
-      currMenu = undefined
+      var modifyPos = document.elementFromPoint(pos.x , pos.y);
+      modifySelection(modifyPos, e)
+
     }
-  //  boldSelection();
+  }
+  // This code ensures that the app doesn't run before the page is loaded.
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', updateOpts)
+  } else {
+    updateOpts()
   }
   document.addEventListener('contextmenu', function(e) { //function e sam a e =>
-  // Prevents right vlick from default from opening
-    if(window.getSelection().type == "Range"){
-      isSelect = true
-      console.log("WARN! a selection was made with a right click?")
-    }
-    if (isSelect)
-      e.preventDefault();
+  // Prevents right click from default from opening
+    e.preventDefault();
     //close menu if no text is selected
     if (currMenu){
-      currMenu.close();
-      currMenu = undefined;
+      closeMenu()
       return;
     }
     var menu = new Menu();
     currMenu = menu;
     // Display menu
     var pos =   menu.getPosition(e);
-    var currSelection = window.getSelection()
-    if(currSelection.type != "Caret"){
-      var currSelection = window.getSelection()
-      var typeSel = currSelection.type
-      console.log("type text is : " + typeSel)
-      var selText = currSelection.baseNode.parentElement.innerHTML
-      console.log("selected text is : " + selText)
-      menu.displayAt(pos.x,pos.y)
-    }
-    else{
-      currMenu = undefined;
-    }
+    currSelection = window.getSelection()
+    menu.displayAt(pos.x,pos.y)
   })
 
 var iconDict = {
@@ -143,6 +188,9 @@ function Menu() {
   // set absolute pos
   this.el.style.position = 'absolute'
   this.el.className = "cf-menu";
+  this.el.style.backgroundColor = Right_Click.options.backgroundColor
+  console.log("bacl" + Right_Click.options.backgroundColor)
+
   //Push all enabled options into arr
   var arr = []
   var keys = Right_Click.options.modifiers
@@ -151,17 +199,37 @@ function Menu() {
     if(Right_Click.options.modifiers[key]){
       arr.push(key)
     }
-  //  console.log(Right_Click.options[key])
   }
-  //For each item in the arr display approriate item in menu
-  var menuHTMLString = "<ul>"
+
+  var menuHTMLString = `<div class="btn-group">`
+  var buttonFrag = document.createDocumentFragment();//creates imaginary Node
+  var buttonBar = document.createElement('div')/// ?? I don't have to worry about cleaning up from memory right?
+  buttonBar.className = 'btn-group'
+  buttonBar.style.backgroundColor = Right_Click.options.backgroundColor
+  // buttonFrag.appendChild(buttonBar)
+
   for(var item in arr){
-    menuHTMLString += `<a href="#"><i class="material-icons">` + iconDict[arr[item]] + `</i>`
+    // buttonBar.chi
+    var button = document.createElement('button')
+    button.className = "btn btn-info"
+    button.type = "button"
+    var icon = document.createElement('i')
+    icon.className = "material-icons"
+    icon.id = arr[item]
+    icon.innerHTML = iconDict[arr[item]]
+    button.appendChild(icon)
+    button.addEventListener('click', menuClicked)
+    buttonBar.appendChild(button)
+
+
+    // menuHTMLString += `<button  onclick="` + boldSelection() + `" type="button" class="btn btn-info" ><i class="material-icons" id = "`+ arr[item] +`">` + iconDict[arr[item]] + `</button>`
+    menuHTMLString += `<button  type="button" class="btn btn-info" ><i class="material-icons" id = "`+ arr[item] +`">` + iconDict[arr[item]] + `</button>`
+
   }
-  menuHTMLString += `</ul>`
-  this.el.innerHTML = menuHTMLString
 
-
+  this.el.appendChild(buttonBar)
+  menuHTMLString += `</div>`
+  // this.el.innerHTML = menuHTMLString
 
 } //if we didn't include the prototype we would have to include this function in the constructor e.g.  function Menu()
 Menu.prototype.displayAt = function(x, y) {
@@ -171,6 +239,8 @@ Menu.prototype.displayAt = function(x, y) {
 
   //use appendChild to get DOM to actually show
   document.body.appendChild(this.el)
+  var arr = document.getElementsByClassName("btn btn-info")
+  //var arr = document.getElementsByClassName("btn btn-info").addEventListener('click', setFormats)
 
 }
 Menu.prototype.close = function() {
