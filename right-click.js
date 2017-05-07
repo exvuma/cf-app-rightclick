@@ -32,7 +32,7 @@
                   "cf-bold": true,
                   "cf-highlight": true,
                   "cf-italic": true,
-                  "cf-code": false
+                  "cf-code": true
                 }
               }
     for (var key in options)
@@ -47,6 +47,7 @@
       for (var key in opts) {
   //      console.log("Key: " + key + "option " + options)
         Right_Click.options[key] = opts[key]
+        updateOpts()
       }
     }
   }
@@ -54,7 +55,8 @@
  function setFormats(){
  // for (var type in Right_Click.options){
    var buttons = document.getElementsByClassName("btn btn-info")
-   for (var b in buttons){
+   var numButt = buttons["length"]
+   for (var b =0; b < numButt; b++){
     //  console.log(buttons[b])
      if(!buttons[b])
       continue
@@ -81,81 +83,7 @@
    }
   return final
  }
-   //create and set and array that holds the formats we wish to set
- function toggleFormat(format){
-   for (var type in Right_Click.options){
-        formats[key] = !formats[key]
-     }
-   }
-  function removeEl(element){
-    /// for example turn <span> some html </span> into simply some html
-    console.log("befpre" + element.parentNode.childNodes)
-    var string = element.innerHTML
-    var replaceNode = document.createTextNode(string)
-    var par = element.parentNode
-    var tempParent =  element.parentNode
-    par.replaceChild(replaceNode, element)
-    document.replaceChild(par,tempParent)
-    console.log("after" )
 
-  }
-function checkforSpan(node, format){
-  var newParentNode = document.createElement("SPAN")
-
-  var child;
-  if(node.nodeType == 3)
-    return node
-  else if (node.hasChildNodes()){
-    //check that child don't have span or children with span recursively
-    var numKids = node.childNodes.length
-    for(var i = 0 ; i < numKids; i++){
-      child =  node.childNodes[i]
-      newParentNode.appendChild(checkforSpan(child))
-     }}
-    // Remove this format from list
-
-    // Remove Tag and return either one/two TEXT's node and a element or a text node
-  if(node.tagName == "SPAN" && (node.classList =="" || node.classList ==format)){
-    if (!node.hasChildNodes()){
-      var newTextNode = document.createTextNode(node.textContent)
-      return newTextNode
-    }
-  }
-  // remove format if it is already there in class List
-  else if(node.classList.contains(format)){
-    node.classList.remove(format)
-  }
-
-}
-function turnOnFormat(sel, format){
-  var range = sel.getRangeAt(0)
-  var contents = range.extractContents()
-  var tempDoc = document.createDocumentFragment()
-  //if selection Text Node add span
-
-  // if hasChildren, check that children don't already have an other empty span classList
-  var numKids = contents.childNodes.length
-  for(var i = 0 ; i < numKids; i++){
-    var goodNode = checkforSpan(contents.childNodes[i], format)
-    tempDoc.appendChild(goodNode)
-
-  }
-}
-function turnOffFormat(sel, format){
-  var range = sel.getRangeAt(0)
-  var contents = range.extractContents()
-  var tempDoc = document.createDocumentFragment()
-  //if selection Text Node add span
-  if(node.tagName == "SPAN" && node.classList =="")
-    return newTextNode
-  // if hasChildren, check that children don't already have an other empty span classList
-  var numKids = contents.childNodes.length
-  for(var i = 0 ; i < numKids; i++){
-    var goodNode = checkforSpan(contents.childNodes[i], format)
-    tempDoc.appendChild(goodNode)
-  }
-  // if()
-}
 /// Toggles formatClass on and off of the <span> tags involving the selection passed in as sel
 function modifySelection(sel, formatClass){
   if (!currSelection){
@@ -293,8 +221,8 @@ function modifySelection(sel, formatClass){
       var formatString =  getFormatString().split(" ")
       console.log(formatString)
       for(var it in formatString){
-            // turnOnFormat(sel, formats)
-            modifySelection(sel, formatString[it])
+          //  turnOnFormat(sel, formats)
+           modifySelection(sel, formatString[it])
       }
 
     }
@@ -358,6 +286,7 @@ function Menu() {
     var button = document.createElement('button')
     button.className = "btn btn-info"
     button.type = "button"
+    button.setAttribute("active", "false")
     var icon = document.createElement('i')
     icon.className = "material-icons"
     icon.id = arr[item]
@@ -369,8 +298,7 @@ function Menu() {
   }
 
   this.el.appendChild(buttonBar)
-  menuHTMLString += `</div>`
-  // this.el.innerHTML = menuHTMLString
+
 
 } //if we didn't include the prototype we would have to include this function in the constructor e.g.  function Menu()
 Menu.prototype.displayAt = function(x, y) {
@@ -410,5 +338,79 @@ Menu.prototype.getPosition = function(e){
    x: posx,
    y: posy
  }
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////// Below is not yet used //////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//create and set and array that holds the formats we wish to set
+function toggleFormat(format){
+for (var type in Right_Click.options){
+     formats[key] = !formats[key]
+  }
+}
+function removeSpan(doc, pos){
+ /// for example turn <span> some html </span> into simply some
+
+ var newNode = document.createTextNode(doc.childNodes[pos].innerText)
+ var precedingNode = doc.childNodes[pos++]
+ doc.removeChild(contents.childNodes[pos])
+ doc.insertBefore(newNode,contents.childNodes[pos])
+}
+function checkforSpan(node, format){
+var newParentNode = document.createElement("SPAN")
+
+var child;
+if(node.nodeType == 3)
+ return node
+else if (node.hasChildNodes()){
+ //check that child don't have span or children with span recursively
+ var numKids = node.childNodes.length
+ for(var i = 0 ; i < numKids; i++){
+   child =  node.childNodes[i]
+   newParentNode.appendChild(checkforSpan(child))
+  }}
+ // Remove this format from list
+
+ // Remove Tag and return either one/two TEXT's node and a element or a text node
+if(node.tagName == "SPAN" && (node.classList =="" || node.classList ==format)){
+ if (!node.hasChildNodes()){
+   var newTextNode = document.createTextNode(node.textContent)
+   return newTextNode
+ }
+}
+// remove format if it is already there in class List
+else if(node.classList.contains(format)){
+ node.classList.remove(format)
+}
+
+}
+function turnOnFormat(sel, format){
+var range = sel.getRangeAt(0)
+var contents = range.extractContents()
+var tempDoc = document.createDocumentFragment()
+//if selection Text Node add span
+
+// if hasChildren, check that children don't already have an other empty span classList
+var numKids = contents.childNodes.length
+for(var i = 0 ; i < numKids; i++){
+ var goodNode = checkforSpan(contents.childNodes[i], format)
+ tempDoc.appendChild(goodNode)
+
+}
+}
+function turnOffFormat(sel, format){
+var range = sel.getRangeAt(0)
+var contents = range.extractContents()
+var tempDoc = document.createDocumentFragment()
+//if selection Text Node add span
+if(node.tagName == "SPAN" && node.classList =="")
+ return newTextNode
+// if hasChildren, check that children don't already have an other empty span classList
+var numKids = contents.childNodes.length
+for(var i = 0 ; i < numKids; i++){
+ var goodNode = checkforSpan(contents.childNodes[i], format)
+ tempDoc.appendChild(goodNode)
+}
+// if()
 }
 })()
