@@ -51,8 +51,53 @@
       }
     }
   }
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////
+  var state = {
+    bolds: [
+      // { element: ..., start: 5, end: 10 },
+      // { element: ..., start: 5, end: 10 },
+      // ..
+      {element: 1}
+    ],
+    italics: [
+    ],
+    containsFormat: function(format, element, range){return True;}
+  }
+  function render(originalElement, formatState) {
+    // sets each child in originalELement to the formatState occording to formatState
+    // const children = originalElement.querySelectorAll('*')
+    const children = originalElement.childNodes
+    let resultHTML = ''
+    var resultNode ;
+    var match = false
+    Array.prototype.slice.call(children)
+      .forEach(child => {
 
+        formatState.bolds.forEach((boldEl, i, list) => {
+          if (boldEl.element === child) {
+            const html = child.textContent
+            resultNode = doc.createElement
+            resultHTML += [
+              child.textContent.substring(0, boldEl.start),
+              '<span class="cf-bold">' + child.textContent.substring(boldEl.start, boldEl.end) + '</span>',
+              child.textContent.substring(boldEl.end),
+            ].join('')
+            match = true
+          }
+          else if (i == list.length -1 && match == false){
+            resultHTML += child.textContent
+            match = false
+          }
+        })
+      })
+    // Do the other formatState things
+    return resultHTML
+  }
+  // commonParent.innerHTML = render(state)
+
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////
  function setFormats(){
+   //sets the value of the format varible we are keeping track of the menu buttons state in
  // for (var type in Right_Click.options){
    var buttons = document.getElementsByClassName("btn btn-info")
    var numButt = buttons["length"]
@@ -83,7 +128,52 @@
    }
   return final
  }
+function modifySelection2(sel, formatString){
+  //modifies state varible according to what formats are set on or off in formatString
+  var focusNode = currSelection.focusNode
+  var anchorNode = currSelection.anchorNode
+  var parEl = anchorNode.parentElement
+  var length = sel.getRangeAt(0).toString().length
 
+  // var format = for
+  //TODO if focus and anchorNode are the same make end account for that
+  var itNode = anchorNode
+  var numNodes = 1;
+  while(anchorNode != itNode){
+    numNodes++;
+    itNode = itNode.nextSibling
+  }
+  var selNodes = getSelectedNodes()
+  // while(selNodes[it] != focusNode){
+  //   //add the length of all the inner med
+  // }
+
+  // set the state array to this element
+  if(anchorNode == focusNode){
+      var newitem = {"element": anchorNode, "start": sel.anchorOffset, "end":   sel.focusOffset  - 1 }
+      state.bolds.push(newitem)
+  }
+
+  console.log(sel.getRangeAt(0).toString())
+  console.log(newitem)
+
+
+  // check if state already contains this format
+  state.bolds.forEach(child => {
+    if (child == anchorNode || child == parEl) {
+      //toggle the childs state TODO
+    }
+  })
+  // if(state.contains(anchorNode) || state.contains(anchorNode) || state.contains(anchorNode)){
+
+  // }
+  // else{
+  //   //add it
+  //   state.formatString[0].anchorNode.start = anchorOffset
+  // }
+  /////////
+
+}
 /// Toggles formatClass on and off of the <span> tags involving the selection passed in as sel
 function modifySelection(sel, formatClass){
   if (!currSelection){
@@ -92,9 +182,11 @@ function modifySelection(sel, formatClass){
   }
   var anchor = currSelection.anchorNode
   var parEl = anchor.parentElement
+
   // if <span >INNER TEXT</span> then convert to simple TEXT Node
   if(parEl == currSelection.focusNode.parentElement && parEl.tagName == "SPAN" && parEl.classList == ""){
-        removeEl(parEl)
+      pass
+        // removeEl(parEl)
   }
 
   // Check if the item has already been bolded then make it whole selection unbold
@@ -107,7 +199,8 @@ function modifySelection(sel, formatClass){
     if(parEl.classList == ""&& parEl.tagName == "SPAN"){
         //remove <span> so we don't generate a ton of those tags
         // parEl.innerHTML = parEl.innerText
-        removeEl(parEl)
+        pass
+        //removeEl(parEl)
       }
     return;
   }// if ATTRIBUTE Node Type, remove the entire TAG list for the parentElement ? think this means this is the beginning of an element
@@ -171,6 +264,7 @@ function modifySelection(sel, formatClass){
  function menuClicked(){
    currSelection = window.getSelection()
    //this is the button
+   //Toggle the menu button that was clicked
    if (this.getAttribute("active") == "true")
       this.setAttribute("active", "false")
    else
@@ -187,7 +281,7 @@ function modifySelection(sel, formatClass){
   ///////////    Event Listeners     //////
   //////////////////////////////////////////
   document.addEventListener('click', clickFunc)
-  document.addEventListener('dbclick', dbClick)
+  // document.addEventListener('dbclick', dbClick)
   //////////////////////////////////////////
   ///////////   Helper Functions   //////
   //////////////////////////////////////////
@@ -195,11 +289,7 @@ function modifySelection(sel, formatClass){
     currMenu.close();
     currMenu = undefined
   }
-  function dbClick(){
-    currMenu.close();
-    currMenu = undefined
-    console.log("double click")
-  }
+
   function clickFunc(e){
   //  setFormats()
     if(window.getSelection().type == "Range"){ //if there's no menu displayed and we selected a range
@@ -211,8 +301,8 @@ function modifySelection(sel, formatClass){
     }
 
     // Menu is already displayed
-    if (currMenu){
-      var menuItems = document.getElementsByClassName("btn btn-info");
+    if (currMenu && isSelect){
+
       //get the item on the menu
       //if user clicked on the menu, get that item
       var pos = currMenu.getPosition(e)
@@ -222,9 +312,13 @@ function modifySelection(sel, formatClass){
       console.log(formatString)
       for(var it in formatString){
           //  turnOnFormat(sel, formats)
-           modifySelection(sel, formatString[it])
+          modifySelection2(sel, formatString[it])
+        //  modifySelection(sel, formatString[it])
       }
-
+      var parEl = currSelection.anchorNode.parentElement
+      if (parEl.contains(currSelection.focusNode)) //if parent element contains all the nodes in the selection
+        parEl.innerHTML = render(currSelection.anchorNode.parentElement, state);
+        //TODO else get a high parent
     }
   }
   // This code ensures that the app doesn't run before the page is loaded.

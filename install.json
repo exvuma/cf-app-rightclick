@@ -6,6 +6,10 @@
         "src": "./right-click.js"
       },
       {
+        "type": "script",
+        "src": "./get-nodes.js"
+      },
+      {
         "type": "style",
         "src": "./style.css"
       }

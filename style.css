@@ -5,7 +5,7 @@
 .cf-menu {
   position: absolute;
   z-index: 1000000000;
-  padding: inherit;
+  /*padding: inherit;*/
   box-shadow: -5px 4px 11px 5px rgba(61, 70, 113, 0.5);
   background: 23123;
 }
