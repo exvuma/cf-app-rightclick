@@ -34,7 +34,12 @@
                   "italic": true,
                   "fontName": false,
                   "strikeThrough": true,
-                  "underline": true
+                  "underline": true,
+                  "justifyCenter":true,
+                  "justifyFull"	:true,
+
+                  "justifyLeft"	:true,
+                  "justifyRight"	:true
                 }
               }
     for (var key in options)
@@ -47,7 +52,6 @@
   window.INSTALL_SCOPE = {
     setOptions: function(opts) {
       for (var key in opts) {
-  //      console.log("Key: " + key + "option " + options)
         Right_Click.options[key] = opts[key]
         updateOpts()
       }
@@ -66,7 +70,7 @@
       this.setAttribute("active", "true")
 
    console.log("menu click")
-     //if somehting was selection was this button was toggled toggle that selection's balue for this type
+     //if something was selection was this button was toggled, toggle that selection's balue for this type
   var type = this.firstChild.id
    document.body.setAttribute('contenteditable', true)
    document.execCommand(type, false, '') //toggle the type of whatever is selected
@@ -115,7 +119,12 @@ var iconDict = {
   "italic": "format_italic",
   "fontName": "code",
   "strikeThrough": "format_strikethrough",
-  "underline":"format_underlined"
+  "underline":"format_underlined",
+  "justifyCenter":"format_align_center",
+  "justifyFull"	:"format_align_justify",
+
+  "justifyLeft"	:"format_align_left",
+  "justifyRight"	:"format_align_right"
 
 }
 function Menu() {
@@ -202,12 +211,6 @@ Menu.prototype.getPosition = function(e){
    y: posy
  }
 }
-///////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////// Below is not yet used //////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
 
 
 })()

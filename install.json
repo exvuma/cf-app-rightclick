@@ -50,8 +50,23 @@
               "type": "boolean",
               "default": false
             },
-            "underline": {
-              "title": "Underline",
+            "justifyCenter": {
+              "title": "Justify Center",
+              "type": "boolean",
+              "default": false
+            },
+            "justifyFull": {
+              "title": "Justify Full",
+              "type": "boolean",
+              "default": false
+            },
+            "justifyLeft": {
+              "title": "Justify Left",
+              "type": "boolean",
+              "default": false
+            },
+            "justifyRight": {
+              "title": "Justify Right",
               "type": "boolean",
               "default": false
             }
