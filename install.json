@@ -35,23 +35,23 @@
         "type": "object",
         "title": "Tools to Include",
         "properties":{
-            "cf-bold": {
+            "bold": {
               "title": "Bold",
               "type": "boolean",
               "default": false
             },
-            "cf-highlight": {
-              "title": "Hightlight",
+            "strikeThrough": {
+              "title": "Strike Through",
               "type": "boolean",
               "default": false
             },
-            "cf-italic": {
+            "italic": {
               "title": "Italic",
               "type": "boolean",
               "default": false
             },
-            "cf-code": {
-              "title": "Code Formatter",
+            "underline": {
+              "title": "Underline",
               "type": "boolean",
               "default": false
             }

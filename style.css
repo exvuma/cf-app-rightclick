@@ -25,6 +25,6 @@ button.btn.btn-info[active = false]{
 }
 
 button.btn.btn-info[active = true]{
-  color:black;
-  border-color:black;
+  /*color:black;
+  border-color:black;*/
 }

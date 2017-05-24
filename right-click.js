@@ -29,10 +29,12 @@
       var options = {
                 "backgroundColor": "#FFFFFF",
                 "modifiers": {
-                  "cf-bold": true,
-                  "cf-highlight": true,
-                  "cf-italic": true,
-                  "cf-code": true
+                  "bold": true,
+                  "backColor": false,
+                  "italic": true,
+                  "fontName": false,
+                  "strikeThrough": true,
+                  "underline": true
                 }
               }
     for (var key in options)
@@ -51,215 +53,8 @@
       }
     }
   }
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////
-  var state = {
-    bolds: [
-      // { element: ..., start: 5, end: 10 },
-      // { element: ..., start: 5, end: 10 },
-      // ..
-      {element: 1}
-    ],
-    italics: [
-    ],
-    containsFormat: function(format, element, range){return True;}
-  }
-  function render(originalElement, formatState) {
-    // sets each child in originalELement to the formatState occording to formatState
-    // const children = originalElement.querySelectorAll('*')
-    const children = originalElement.childNodes
-    let resultHTML = ''
-    var resultNode ;
-    var match = false
-    Array.prototype.slice.call(children)
-      .forEach(child => {
-
-        formatState.bolds.forEach((boldEl, i, list) => {
-          if (boldEl.element === child) {
-            const html = child.textContent
-            resultNode = doc.createElement
-            resultHTML += [
-              child.textContent.substring(0, boldEl.start),
-              '<span class="cf-bold">' + child.textContent.substring(boldEl.start, boldEl.end) + '</span>',
-              child.textContent.substring(boldEl.end),
-            ].join('')
-            match = true
-          }
-          else if (i == list.length -1 && match == false){
-            resultHTML += child.textContent
-            match = false
-          }
-        })
-      })
-    // Do the other formatState things
-    return resultHTML
-  }
-  // commonParent.innerHTML = render(state)
-
-  ////////////////////////////////////////////////////////////////////////////////////////////////////////
- function setFormats(){
-   //sets the value of the format varible we are keeping track of the menu buttons state in
- // for (var type in Right_Click.options){
-   var buttons = document.getElementsByClassName("btn btn-info")
-   var numButt = buttons["length"]
-   for (var b =0; b < numButt; b++){
-    //  console.log(buttons[b])
-     if(!buttons[b])
-      continue
-     if (buttons[b].getAttribute("active") == "true"){
-       formats[buttons[b].firstChild.id] = true
-       console.log("this button is in focus" + buttons[b].firstChild.id)
-     }
-     else
-        formats[buttons[b].firstChild.id] = false
-      }
-   return formats
- }
- function getFormatString(){
-   var final = ""
-   for (var key in formats){
-    //  console.log(buttons[b])
-     if (formats[key]){
-       if(final)
-          final += " " + key
-        else
-        final = key
-     }
-
-   }
-  return final
- }
-function modifySelection2(sel, formatString){
-  //modifies state varible according to what formats are set on or off in formatString
-  var focusNode = currSelection.focusNode
-  var anchorNode = currSelection.anchorNode
-  var parEl = anchorNode.parentElement
-  var length = sel.getRangeAt(0).toString().length
-
-  // var format = for
-  //TODO if focus and anchorNode are the same make end account for that
-  var itNode = anchorNode
-  var numNodes = 1;
-  while(anchorNode != itNode){
-    numNodes++;
-    itNode = itNode.nextSibling
-  }
-  var selNodes = getSelectedNodes()
-  // while(selNodes[it] != focusNode){
-  //   //add the length of all the inner med
-  // }
-
-  // set the state array to this element
-  if(anchorNode == focusNode){
-      var newitem = {"element": anchorNode, "start": sel.anchorOffset, "end":   sel.focusOffset  - 1 }
-      state.bolds.push(newitem)
-  }
-
-  console.log(sel.getRangeAt(0).toString())
-  console.log(newitem)
 
 
-  // check if state already contains this format
-  state.bolds.forEach(child => {
-    if (child == anchorNode || child == parEl) {
-      //toggle the childs state TODO
-    }
-  })
-  // if(state.contains(anchorNode) || state.contains(anchorNode) || state.contains(anchorNode)){
-
-  // }
-  // else{
-  //   //add it
-  //   state.formatString[0].anchorNode.start = anchorOffset
-  // }
-  /////////
-
-}
-/// Toggles formatClass on and off of the <span> tags involving the selection passed in as sel
-function modifySelection(sel, formatClass){
-  if (!currSelection){
-    if (!SelectEvent) return
-    currSelection = SelectEvent.getSelection()
-  }
-  var anchor = currSelection.anchorNode
-  var parEl = anchor.parentElement
-
-  // if <span >INNER TEXT</span> then convert to simple TEXT Node
-  if(parEl == currSelection.focusNode.parentElement && parEl.tagName == "SPAN" && parEl.classList == ""){
-      pass
-        // removeEl(parEl)
-  }
-
-  // Check if the item has already been bolded then make it whole selection unbold
-// 3 means this is a Node of type TEXT
-  if (currSelection.getRangeAt(0).toString() == "")
-    return
-// 3 means this is a Node of type TEXT
-  if (anchor.nodeType == 3 && parEl.classList.contains(formatClass)){
-    parEl.classList.remove(formatClass)
-    if(parEl.classList == ""&& parEl.tagName == "SPAN"){
-        //remove <span> so we don't generate a ton of those tags
-        // parEl.innerHTML = parEl.innerText
-        pass
-        //removeEl(parEl)
-      }
-    return;
-  }// if ATTRIBUTE Node Type, remove the entire TAG list for the parentElement ? think this means this is the beginning of an element
-  if (anchor.nodeType == 2 && parEl.classList.contains(formatClass)){
-    parEl.classList.remove(formatClass)
-    currSelection.baseNode.parentElement.innerHTML = currSelection.baseNode.parentElement.innerText
-  }//if Element type
-  if (anchor.nodeType == 1 && parEl.classList.contains(formatClass)){
-    var sis =  anchor
-    while(sis && currSelection.containsNode(sis)){
-      if(sis.nodeType == 1)
-        console.log("~~! Using sis")
-        modifySelection(sis,  formatClass)//TODO change params
-      sis.classList.remove(formatClass)
-      sis =  sis.nextSibling
-    }
-  }
-  //TODO: anchor.getElementsByTagName("strong")
-  if (currSelection.getRangeAt(0).toString() == "")
-    return
-
-  // If wasn't bolded yet then bold it!
-  // if TEXT node then extract the conents into a docFragment object then create a new node to insert at the front of that range
-  if (anchor.nodeType == 3 ){
-
-    var range = currSelection.getRangeAt(0)
-    var contents = range.extractContents()
-    var newNode ;
-    if(parEl.tagName != "SPAN" ){
-       newNode = document.createElement("SPAN")
-       newNode.classList.add(formatClass)
-       newNode.appendChild(contents)
-       range.insertNode(newNode)
-     }
-    else if (currSelection.toString() == "" || currSelection.toString() == "\n" ) {
-        console.log("whie space"+currSelection.toString())
-       return
-    }
-    else{
-      console.log("no whie space"+currSelection.toString())
-    }
-  }
-}
-
-//  currSelection.anchorNode.parentElement.classList.add("cf-selection","bold-class")
-
-  // //If wanted to create a DIV to replace html..
-  // var start = currSelection.anchorOffset
-  // var end = currSelection.focusOffset
-  // var orig = currSelection.baseNode.parentElement.innerHTML
-  // var alterText = currSelection.baseNode.parentElement.innerHTML.slice(start,end)
-  // var newEl = document.createElement('div')
-  // newEl.className = "cf-bold-class"
-  // newEl.innerHTML = alterText
-  // // currSelection.baseNode.parentElement.appendChild(newEl)
-  // if(!  currSelection.baseNode.parentElement)return
-  // currSelection.baseNode.parentElement.innerHTML = currSelection.baseNode.parentElement.innerHTML.replace(currSelection.getRangeAt(0).toString(), newEl.outerHTML)
-  // currSelection.baseNode.parentElement.innerHTML = currSelection.baseNode.parentElement.innerHTML.replace(currSelection.getRangeAt(0).toString(), `<strong>${currSelection.getRangeAt(0).toString()}</strong>`)
-  //  currSelection.baseNode.parentElement.setAttribute("class", "cf-bold-class")
 
  function menuClicked(){
    currSelection = window.getSelection()
@@ -269,58 +64,27 @@ function modifySelection(sel, formatClass){
       this.setAttribute("active", "false")
    else
       this.setAttribute("active", "true")
-   formats[this.firstChild.id] = !formats[this.firstChild.id]
-   setFormats()
+
    console.log("menu click")
- }
+     //if somehting was selection was this button was toggled toggle that selection's balue for this type
+  var type = this.firstChild.id
+   document.body.setAttribute('contenteditable', true)
+   document.execCommand(type, false, '') //toggle the type of whatever is selected
+   document.body.setAttribute('contenteditable', false)
+
+   }
+
 
   var currMenu ;
   var isSelect = false;
 
-  //////////////////////////////////////////
-  ///////////    Event Listeners     //////
-  //////////////////////////////////////////
-  document.addEventListener('click', clickFunc)
-  // document.addEventListener('dbclick', dbClick)
-  //////////////////////////////////////////
-  ///////////   Helper Functions   //////
-  //////////////////////////////////////////
   function closeMenu(){
     currMenu.close();
     currMenu = undefined
   }
 
-  function clickFunc(e){
-  //  setFormats()
-    if(window.getSelection().type == "Range"){ //if there's no menu displayed and we selected a range
-      isSelect = true
-      SelectEvent = e
-    }
-    else if (window.getSelection().type == "Caret") { // currMenu existed
-      isSelect = false
-    }
 
-    // Menu is already displayed
-    if (currMenu && isSelect){
 
-      //get the item on the menu
-      //if user clicked on the menu, get that item
-      var pos = currMenu.getPosition(e)
-      var modifyPos = document.elementFromPoint(pos.x , pos.y);
-      var sel = currSelection
-      var formatString =  getFormatString().split(" ")
-      console.log(formatString)
-      for(var it in formatString){
-          //  turnOnFormat(sel, formats)
-          modifySelection2(sel, formatString[it])
-        //  modifySelection(sel, formatString[it])
-      }
-      var parEl = currSelection.anchorNode.parentElement
-      if (parEl.contains(currSelection.focusNode)) //if parent element contains all the nodes in the selection
-        parEl.innerHTML = render(currSelection.anchorNode.parentElement, state);
-        //TODO else get a high parent
-    }
-  }
   // This code ensures that the app doesn't run before the page is loaded.
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', updateOpts)
@@ -342,12 +106,17 @@ function modifySelection(sel, formatClass){
     currSelection = window.getSelection()
     menu.displayAt(pos.x,pos.y)
   })
-
+//from install.json varibles/type varible from execCommand(type) TO the dictionary for the buttons specified in bootstrap
+// key avalible https://developer.mozilla.org/en-US/docs/Web/API/Document/execCommand
+// values avalible https://www.w3schools.com/icons/icons_reference.asp
 var iconDict = {
-  "cf-bold": "format_bold",
-  "cf-highlight": "highlight",
-  "cf-italic": "format_italic",
-  "cf-code": "code"
+  "bold": "format_bold",
+  "backColor": "highlight",
+  "italic": "format_italic",
+  "fontName": "code",
+  "strikeThrough": "format_strikethrough",
+  "underline":"format_underlined"
+
 }
 function Menu() {
   //hold DOM element.
@@ -436,75 +205,9 @@ Menu.prototype.getPosition = function(e){
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////// Below is not yet used //////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//create and set and array that holds the formats we wish to set
-function toggleFormat(format){
-for (var type in Right_Click.options){
-     formats[key] = !formats[key]
-  }
-}
-function removeSpan(doc, pos){
- /// for example turn <span> some html </span> into simply some
 
- var newNode = document.createTextNode(doc.childNodes[pos].innerText)
- var precedingNode = doc.childNodes[pos++]
- doc.removeChild(contents.childNodes[pos])
- doc.insertBefore(newNode,contents.childNodes[pos])
-}
-function checkforSpan(node, format){
-var newParentNode = document.createElement("SPAN")
 
-var child;
-if(node.nodeType == 3)
- return node
-else if (node.hasChildNodes()){
- //check that child don't have span or children with span recursively
- var numKids = node.childNodes.length
- for(var i = 0 ; i < numKids; i++){
-   child =  node.childNodes[i]
-   newParentNode.appendChild(checkforSpan(child))
-  }}
- // Remove this format from list
 
- // Remove Tag and return either one/two TEXT's node and a element or a text node
-if(node.tagName == "SPAN" && (node.classList =="" || node.classList ==format)){
- if (!node.hasChildNodes()){
-   var newTextNode = document.createTextNode(node.textContent)
-   return newTextNode
- }
-}
-// remove format if it is already there in class List
-else if(node.classList.contains(format)){
- node.classList.remove(format)
-}
 
-}
-function turnOnFormat(sel, format){
-var range = sel.getRangeAt(0)
-var contents = range.extractContents()
-var tempDoc = document.createDocumentFragment()
-//if selection Text Node add span
 
-// if hasChildren, check that children don't already have an other empty span classList
-var numKids = contents.childNodes.length
-for(var i = 0 ; i < numKids; i++){
- var goodNode = checkforSpan(contents.childNodes[i], format)
- tempDoc.appendChild(goodNode)
-
-}
-}
-function turnOffFormat(sel, format){
-var range = sel.getRangeAt(0)
-var contents = range.extractContents()
-var tempDoc = document.createDocumentFragment()
-//if selection Text Node add span
-if(node.tagName == "SPAN" && node.classList =="")
- return newTextNode
-// if hasChildren, check that children don't already have an other empty span classList
-var numKids = contents.childNodes.length
-for(var i = 0 ; i < numKids; i++){
- var goodNode = checkforSpan(contents.childNodes[i], format)
- tempDoc.appendChild(goodNode)
-}
-// if()
-}
 })()
