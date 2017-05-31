@@ -38,37 +38,37 @@
             "bold": {
               "title": "Bold",
               "type": "boolean",
-              "default": false
+              "default": true
             },
             "strikeThrough": {
               "title": "Strike Through",
               "type": "boolean",
-              "default": false
+              "default": true
             },
             "italic": {
               "title": "Italic",
               "type": "boolean",
-              "default": false
+              "default": true
             },
             "justifyCenter": {
               "title": "Justify Center",
               "type": "boolean",
-              "default": false
+              "default": true
             },
             "justifyFull": {
               "title": "Justify Full",
               "type": "boolean",
-              "default": false
+              "default": true
             },
             "justifyLeft": {
               "title": "Justify Left",
               "type": "boolean",
-              "default": false
+              "default": true
             },
             "justifyRight": {
               "title": "Justify Right",
               "type": "boolean",
-              "default": false
+              "default": true
             }
           }
         }
