@@ -49,8 +49,8 @@
       for (var key in opts) {
         Right_Click.options[key] = opts[key]
         updateOpts()
-        openMenu()
       }
+      openMenu("INSTALL")
     }
   }
 
@@ -60,7 +60,6 @@
    // Toggle the menu button that was clicked
     if (this.getAttribute('active') == 'true') { this.setAttribute('active', 'false') } else { this.setAttribute('active', 'true') }
 
-    console.log('menu click')
      // if something was selection was this button was toggled, toggle that selection's balue for this type
     var type = this.firstChild.id
     document.body.setAttribute('contenteditable', true)
@@ -87,16 +86,20 @@
     openMenu(e)
   })
   function openMenu(e){
+    var pos
     if (currMenu) {
+      pos = currMenu.getLastPosition()
       closeMenu()
-      return
+      if(e !== "INSTALL"){
+        return
+      }
     }
     var menu = new Menu()
     currMenu = menu
     // Display menu
-    console.log(e, "last pos" + menu.lastposx)
 
-    var pos = menu.getPosition(e)
+    if(!pos)
+      pos = menu.getPosition(e)
     currSelection = window.getSelection()
     menu.displayAt(pos.x, pos.y)
 
@@ -126,6 +129,7 @@
     this.el.style.position = 'absolute'
     this.el.className = 'cf-menu'
     this.el.style.backgroundColor = Right_Click.options.backgroundColor
+    //When initially created set lastpos to middle
     this.lastposx = window.innerWidth / 2;
     this.lastposy = window.innerHeight / 2;
   // Push all enabled options into arr
@@ -165,23 +169,30 @@
       x = this.lastposx
       y = this.lastposy
     }
+    this.lastposx = x;
+    this.lastposy = y
     this.el.style.left = x + 'px'
     this.el.style.top = y + 'px'
-    console.log(x)
+
 
   // use appendChild to get DOM to actually show
     document.body.appendChild(this.el)
   }
   Menu.prototype.close = function () {
-  // removeChild
+  // remove menu from document
     if (this.el) { document.body.removeChild(this.el) }
+  }
+  Menu.prototype.getLastPosition = function (e) {
+    return {
+      x: this.lastposx,
+      y: this.lastposy
+    }
   }
   Menu.prototype.getPosition = function (e) {
     // var posx = 0
     // var posy = 0
      var posx = this.lastposx
      var posy = this.lastposy
-
 
     if (!e) var e = window.event
 
@@ -193,16 +204,6 @@
                       document.documentElement.scrollLeft
       posy = e.clientY + document.body.scrollTop +
                       document.documentElement.scrollTop
-    }
-    this.lastposy = posy
-    this.lastposx = posx
-    console.log(this.asdads)
-    if(posx === 0 && posy === 0 ){
-      console.log(this.asdads)
-      return {
-        x: this.lastposy,
-        y: this.lastposx
-      }
     }
     return {
       x: posx,
