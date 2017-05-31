@@ -1,3 +1,8 @@
-*.txt
+# Ignore bundler config.
+/.bundle
+
+# Ignore all logfiles and tempfiles.
+.DS_Store
 *.log
-*.html
+/tmp
+node_modules/**/*
