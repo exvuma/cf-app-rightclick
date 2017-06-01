@@ -50,23 +50,8 @@
               "type": "boolean",
               "default": true
             },
-            "justifyCenter": {
-              "title": "Justify Center",
-              "type": "boolean",
-              "default": true
-            },
-            "justifyFull": {
-              "title": "Justify Full",
-              "type": "boolean",
-              "default": true
-            },
-            "justifyLeft": {
-              "title": "Justify Left",
-              "type": "boolean",
-              "default": true
-            },
-            "justifyRight": {
-              "title": "Justify Right",
+            "justify": {
+              "title": "Justification",
               "type": "boolean",
               "default": true
             }

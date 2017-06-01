@@ -2,17 +2,17 @@
   'use strict'
   // If Browser won't be compatible
   if (!window.addEventListener) { return }
-  var options = { window: window }
-  var Right_Click = {'options': {} }
+  var options = { window : window }
+  var Right_Click = {'options': {} } //stores all buttons and not just those in install.json
   var currSelection
-  var formats = {} // dict of formats that are enabled
-  function updateOpts () {
+  var enabled_formats = {} // dict of formats that are enabled
+  function updateFormats () { //sets enabled_formats[key]
     Right_Click.options = options
     for (var key in options.modifiers) { // temporarily set formats var TODO change to when button is enabeld
       if (Right_Click.options.modifiers[key]) {
-        formats[key] = true
+        enabled_formats[key] = true
       } else {
-        formats[key] = false
+        enabled_formats[key] = false
       }
     }
   }
@@ -20,8 +20,6 @@
     for (var key in INSTALL_OPTIONS) {
       options[key] = INSTALL_OPTIONS[key]
       Right_Click.options[key] = options[key]
-      //pop open menu
-      // openMenu()
     }
   } else { // Just for when we are development mode from browser to simulate
     var options = {
@@ -33,10 +31,8 @@
         'fontName': false,
         'strikeThrough': true,
         'underline': true,
-        'justifyCenter': true,
-        'justifyFull': true,
-        'justifyLeft': true,
-        'justifyRight': true
+        'justify' : true
+
       }
     }
     for (var key in options) { Right_Click.options[key] = options[key] }
@@ -48,9 +44,9 @@
     setOptions: function (opts) {
       for (var key in opts) {
         Right_Click.options[key] = opts[key]
-        updateOpts()
+        updateFormats()
       }
-      openMenu("INSTALL")
+      openMenu("INSTALL")//passing in "INSTALL" tells the function to handle as an INSTALL
     }
   }
 
@@ -76,9 +72,9 @@
 
   // This code ensures that the app doesn't run before the page is loaded.
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', updateOpts)
+    document.addEventListener('DOMContentLoaded', updateFormats)
   } else {
-    updateOpts()
+    updateFormats()
   }
   document.addEventListener('contextmenu', function (e) { // function e sam a e =>
   // Prevents right click from default from opening
@@ -116,7 +112,6 @@
     'underline': 'format_underlined',
     'justifyCenter': 'format_align_center',
     'justifyFull': 'format_align_justify',
-
     'justifyLeft': 'format_align_left',
     'justifyRight': 'format_align_right'
 
@@ -137,7 +132,15 @@
     var keys = Right_Click.options.modifiers
     for (key in keys) {
       if (Right_Click.options.modifiers[key]) {
-        arr.push(key)
+        console.log("key", key)
+        if(key === "justify"){
+          arr.push("justifyLeft","justifyFull", "justifyRight","justifyCenter")
+          console.log("push justid", arr)
+        }else if(key.substring(0,7) === "justify"){ //TODO check if key contains justify
+          continue
+        }
+        else
+          arr.push(key)
       }
     }
 
