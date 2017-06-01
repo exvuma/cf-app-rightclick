@@ -2,13 +2,13 @@
   'use strict'
   // If Browser won't be compatible
   if (!window.addEventListener) { return }
-  var options = { window : window }
-  var Right_Click = {'options': {} } //stores all buttons and not just those in install.json
+  var options = { window: window }
   var currSelection
+  var Right_Click = { 'options': {} } // stores all buttons and not just those in install.json
   var enabled_formats = {} // dict of formats that are enabled
-  function updateFormats () { //sets enabled_formats[key]
+  function updateFormats () { // sets enabled_formats[key]
     Right_Click.options = options
-    for (var key in options.modifiers) { // temporarily set formats var TODO change to when button is enabeld
+    for (var key in options.modifiers) {
       if (Right_Click.options.modifiers[key]) {
         enabled_formats[key] = true
       } else {
@@ -31,7 +31,7 @@
         'fontName': false,
         'strikeThrough': true,
         'underline': true,
-        'justify' : true
+        'justify': true
 
       }
     }
@@ -46,7 +46,7 @@
         Right_Click.options[key] = opts[key]
         updateFormats()
       }
-      openMenu("INSTALL")//passing in "INSTALL" tells the function to handle as an INSTALL
+      openMenu('INSTALL')// passing in "INSTALL" tells the function to handle as an INSTALL
     }
   }
 
@@ -54,8 +54,7 @@
     currSelection = window.getSelection()
    // this is the button
    // Toggle the menu button that was clicked
-    if (this.getAttribute('active') == 'true') { this.setAttribute('active', 'false') } else { this.setAttribute('active', 'true') }
-
+    if (this.getAttribute('active') === 'true') { this.setAttribute('active', 'false') } else { this.setAttribute('active', 'true') }
      // if something was selection was this button was toggled, toggle that selection's balue for this type
     var type = this.firstChild.id
     document.body.setAttribute('contenteditable', true)
@@ -81,12 +80,12 @@
     e.preventDefault()
     openMenu(e)
   })
-  function openMenu(e){
+  function openMenu (e) {
     var pos
     if (currMenu) {
       pos = currMenu.getLastPosition()
       closeMenu()
-      if(e !== "INSTALL"){
+      if (e !== 'INSTALL') {
         return
       }
     }
@@ -94,11 +93,9 @@
     currMenu = menu
     // Display menu
 
-    if(!pos)
-      pos = menu.getPosition(e)
+    if (!pos) { pos = menu.getPosition(e) }
     currSelection = window.getSelection()
     menu.displayAt(pos.x, pos.y)
-
   }
 // from install.json varibles/type varible from execCommand(type) TO the dictionary for the buttons specified in bootstrap
 // key avalible https://developer.mozilla.org/en-US/docs/Web/API/Document/execCommand
@@ -124,27 +121,22 @@
     this.el.style.position = 'absolute'
     this.el.className = 'cf-menu'
     this.el.style.backgroundColor = Right_Click.options.backgroundColor
-    //When initially created set lastpos to middle
-    this.lastposx = window.innerWidth / 2;
-    this.lastposy = window.innerHeight / 2;
+    // When initially created set lastpos to middle
+    this.lastposx = window.innerWidth / 2
+    this.lastposy = window.innerHeight / 2
   // Push all enabled options into arr
     var arr = []
     var keys = Right_Click.options.modifiers
     for (key in keys) {
       if (Right_Click.options.modifiers[key]) {
-        console.log("key", key)
-        if(key === "justify"){
-          arr.push("justifyLeft","justifyFull", "justifyRight","justifyCenter")
-          console.log("push justid", arr)
-        }else if(key.substring(0,7) === "justify"){ //TODO check if key contains justify
+        if (key === 'justify') {
+          arr.push('justifyLeft', 'justifyFull', 'justifyRight', 'justifyCenter')
+        } else if (key.substring(0, 7) === 'justify') {
           continue
-        }
-        else
-          arr.push(key)
+        } else { arr.push(key) }
       }
     }
 
-    var menuHTMLString = `<div class="btn-group">`
     var buttonBar = document.createElement('div')/// ?? I don't have to worry about cleaning up from memory right?
     buttonBar.className = 'btn-group'
     buttonBar.style.backgroundColor = Right_Click.options.backgroundColor
@@ -168,15 +160,14 @@
   } // if we didn't include the prototype we would have to include this function in the constructor e.g.  function Menu()
   Menu.prototype.displayAt = function (x, y) {
   // set style postiton
-    if (!x || !y){
+    if (!x || !y) {
       x = this.lastposx
       y = this.lastposy
     }
-    this.lastposx = x;
+    this.lastposx = x
     this.lastposy = y
     this.el.style.left = x + 'px'
     this.el.style.top = y + 'px'
-
 
   // use appendChild to get DOM to actually show
     document.body.appendChild(this.el)
@@ -194,10 +185,10 @@
   Menu.prototype.getPosition = function (e) {
     // var posx = 0
     // var posy = 0
-     var posx = this.lastposx
-     var posy = this.lastposy
+    var posx = this.lastposx
+    var posy = this.lastposy
 
-    if (!e) var e = window.event
+    if (!e) e = window.event
 
     if (e.pageX || e.pageY) {
       posx = e.pageX

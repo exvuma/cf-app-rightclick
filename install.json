@@ -6,10 +6,6 @@
         "src": "./right-click.js"
       },
       {
-        "type": "script",
-        "src": "./get-nodes.js"
-      },
-      {
         "type": "style",
         "src": "./style.css"
       }
@@ -25,12 +21,6 @@
   },
   "options": {
     "properties": {
-      "backgroundColor":{
-        "title" : "Background Color",
-        "default": "#000000",
-        "format": "color",
-        "type": "string"
-      },
       "modifiers":{
         "type": "object",
         "title": "Tools to Include",
