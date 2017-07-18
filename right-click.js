@@ -2,53 +2,6 @@
   'use strict'
   // If Browser won't be compatible
   if (!window.addEventListener) { return }
-  var options = { window: window }
-  var currSelection
-  var Right_Click = { 'options': {} } // stores all buttons and not just those in install.json
-  var enabled_formats = {} // dict of formats that are enabled
-  function updateFormats () { // sets enabled_formats[key]
-    Right_Click.options = options
-    for (var key in options.modifiers) {
-      if (Right_Click.options.modifiers[key]) {
-        enabled_formats[key] = true
-      } else {
-        enabled_formats[key] = false
-      }
-    }
-  }
-  if (typeof window.INSTALL_OPTIONS === 'object') {
-    for (var key in INSTALL_OPTIONS) {
-      options[key] = INSTALL_OPTIONS[key]
-      Right_Click.options[key] = options[key]
-    }
-  } else { // Just for when we are development mode from browser to simulate
-    var options = {
-      'backgroundColor': '#FFFFFF',
-      'modifiers': {
-        'bold': true,
-        'backColor': false,
-        'italic': true,
-        'fontName': false,
-        'strikeThrough': true,
-        'underline': true,
-        'justify': true
-
-      }
-    }
-    for (var key in options) { Right_Click.options[key] = options[key] }
-  }
-
-  // call set by install.json "execute": "INSTALL_SCOPE.setOptions(INSTALL_OPTIONS)"
-  // apps team provides INSTALL_OPTIONS and the excution of this function granted line aboeve is in install.json
-  window.INSTALL_SCOPE = {
-    setOptions: function (opts) {
-      for (var key in opts) {
-        Right_Click.options[key] = opts[key]
-        updateFormats()
-      }
-      openMenu('INSTALL')// passing in "INSTALL" tells the function to handle as an INSTALL
-    }
-  }
 
   function menuClicked () {
     currSelection = window.getSelection()
@@ -62,58 +15,31 @@
     document.body.setAttribute('contenteditable', false)
   }
 
-  var currMenu
+  var currMenu = undefined
 
   function closeMenu () {
     currMenu.close()
     currMenu = undefined
   }
 
-  // This code ensures that the app doesn't run before the page is loaded.
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', updateFormats)
-  } else {
-    updateFormats()
-  }
-  document.addEventListener('contextmenu', function (e) { // function e sam a e =>
-  // Prevents right click from default from opening
-    e.preventDefault()
-    openMenu(e)
-  })
-  function openMenu (e) {
-    var pos
-    if (currMenu) {
-      pos = currMenu.getLastPosition()
-      closeMenu()
-      if (e !== 'INSTALL') {
-        return
-      }
-    }
-    var menu = new Menu()
-    currMenu = menu
-    // Display menu
 
-    if (!pos) { pos = menu.getPosition(e) }
-    currSelection = window.getSelection()
-    menu.displayAt(pos.x, pos.y)
-  }
 // from install.json varibles/type varible from execCommand(type) TO the dictionary for the buttons specified in bootstrap
 // key avalible https://developer.mozilla.org/en-US/docs/Web/API/Document/execCommand
 // values avalible https://www.w3schools.com/icons/icons_reference.asp
-  var iconDict = {
-    'bold': 'format_bold',
-    'backColor': 'highlight',
-    'italic': 'format_italic',
-    'fontName': 'code',
-    'strikeThrough': 'format_strikethrough',
-    'underline': 'format_underlined',
-    'justifyCenter': 'format_align_center',
-    'justifyFull': 'format_align_justify',
-    'justifyLeft': 'format_align_left',
-    'justifyRight': 'format_align_right'
-
-  }
   function Menu () {
+    var iconDict = {
+      'bold': 'format_bold',
+      'backColor': 'highlight',
+      'italic': 'format_italic',
+      'fontName': 'code',
+      'strikeThrough': 'format_strikethrough',
+      'underline': 'format_underlined',
+      'justifyCenter': 'format_align_center',
+      'justifyFull': 'format_align_justify',
+      'justifyLeft': 'format_align_left',
+      'justifyRight': 'format_align_right'
+
+    }
   // hold DOM element.
   // createElement to actually make the div
     this.el = document.createElement('div')
@@ -125,7 +51,7 @@
     this.lastposx = window.innerWidth / 2
     this.lastposy = window.innerHeight / 2
   // Push all enabled options into arr
-    var arr = []
+    var arr = [] //arr holds buttons to be displayed
     var keys = Right_Click.options.modifiers
     for (key in keys) {
       if (Right_Click.options.modifiers[key]) {
@@ -142,7 +68,6 @@
     buttonBar.style.backgroundColor = Right_Click.options.backgroundColor
 
     for (var item in arr) {
-    // buttonBar.chi
       var button = document.createElement('button')
       button.className = 'btn btn-info'
       button.type = 'button'
@@ -183,8 +108,6 @@
     }
   }
   Menu.prototype.getPosition = function (e) {
-    // var posx = 0
-    // var posy = 0
     var posx = this.lastposx
     var posy = this.lastposy
 
@@ -204,4 +127,91 @@
       y: posy
     }
   }
+  function openMenu (e) {
+    var pos
+    if (currMenu && e === 'INSTALL' ) {
+    // then display menu at last position
+      pos = currMenu.getLastPosition()
+      closeMenu()
+    }
+    else if ( currMenu && e !== 'INSTALL' ) {
+      // close the menu and return
+      closeMenu()
+      return
+    }
+    var menu = new Menu()
+    currMenu = menu
+
+    if (!pos) { pos = menu.getPosition(e) }
+    currSelection = window.getSelection()
+    menu.displayAt(pos.x, pos.y)
+  }
+  var options = { window : window }
+  var currSelection
+  var Right_Click = { 'options': {} } // stores all buttons and not just those in install.json
+  var enabled_formats = {} // dict of formats that are enabled
+  function updateFormats () { // sets enabled_formats[key]
+    Right_Click.options = options
+    for (var key in options.modifiers) {
+      if (Right_Click.options.modifiers[key]) {
+        enabled_formats[key] = true
+      } else {
+        enabled_formats[key] = false
+      }
+    }
+  }
+  // ##if in preview
+  if (typeof window.INSTALL_OPTIONS === 'object') {
+    for (var key in INSTALL_OPTIONS) {
+      options[key] = INSTALL_OPTIONS[key]
+      Right_Click.options[key] = options[key]
+    }
+    //  (document.readyState !== 'loading') {
+      // openMenu('INSTALL')
+
+  } else { // Just for when we are development mode from browser to simulate
+    var options = {
+      // 'backgroundColor': '#FFFFFF',
+      'modifiers': {
+        'bold': true,
+        'backColor': false,
+        'italic': true,
+        'fontName': false,
+        'strikeThrough': true,
+        'underline': true,
+        'justify': true
+
+      }
+    }
+    for (var key in options) { Right_Click.options[key] = options[key] }
+  }
+
+  // call set by install.json "execute": "INSTALL_SCOPE.setOptions(INSTALL_OPTIONS)"
+  // apps team provides INSTALL_OPTIONS and the excution of this function granted line aboeve is in install.json
+  window.INSTALL_SCOPE = {
+    setOptions: function (opts) {
+      for (var key in opts) {
+        Right_Click.options[key] = opts[key]
+        updateFormats()
+        openMenu('INSTALL')
+      }
+      // openMenu('INSTALL')// passing in "INSTALL" tells the function to handle as an INSTALL
+    }
+  }
+  // This code ensures that the app doesn't run before the page is loaded.
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', updateFormats)
+    document.addEventListener('DOMContentLoaded', openMenu.bind(null, 'INSTALL'))
+  } else {
+    updateFormats()
+    openMenu('INSTALL')
+  }
+  document.addEventListener('contextmenu', function (e) { // function e sam a e =>
+  // Prevents right click from default from opening
+    e.preventDefault()
+    openMenu(e);
+    return;
+  });
+
+
 })()
