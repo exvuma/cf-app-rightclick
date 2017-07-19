@@ -2,8 +2,27 @@
   'use strict'
   // If Browser won't be compatible
   if (!window.addEventListener) { return }
+  var newUrl = "https://victoriabernard.com"
+  // once extensions is clicked will open up this link in the current tab
+  // chrome.tabs.query({'active': true}, function(tabs) {
+  //   chrome.tabs.update(tabs[0].id, {url: newUrl});
+  // });
+// var tri = window.Trianglify({
+//   width: 1000,
+//   height: 1000,
+//   // cell_size: reg.size,
+//   // x_colors: reg.colors,
+//   // variance: reg.variance / 100
+// })
 
-  function menuClicked () {
+
+
+
+// svg2.style.background = "url('data:image/svg+xml;utf8," + svg.outerHTML + "') no-repeat"
+// svg2.style.backgroundSize = 'cover'
+
+
+  function menuClicked (e) {
     currSelection = window.getSelection()
    // this is the button
    // Toggle the menu button that was clicked
@@ -26,11 +45,31 @@
 // from install.json varibles/type varible from execCommand(type) TO the dictionary for the buttons specified in bootstrap
 // key avalible https://developer.mozilla.org/en-US/docs/Web/API/Document/execCommand
 // values avalible https://www.w3schools.com/icons/icons_reference.asp
+
+// import "https://fonts.googleapis.com/icon?family=Material+Icons";
   function Menu () {
     var iconDict = {
       'bold': 'format_bold',
       'backColor': 'highlight',
       'italic': 'format_italic',
+      'fontName': 'code',
+      'strikeThrough': 'format_strikethrough',
+      'underline': 'format_underlined',
+      'justifyCenter': 'format_align_center',
+      'justifyFull': 'format_align_justify',
+      'justifyLeft': 'format_align_left',
+      'justifyRight': 'format_align_right'
+
+    }
+    var iconDict = {
+      'bold': '<svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"> \
+          <path d="M15.6 10.79c.97-.67 1.65-1.77 1.65-2.79 0-2.26-1.75-4-4-4H7v14h7.04c2.09 0 3.71-1.7 3.71-3.79 0-1.52-.86-2.82-2.15-3.42zM10 6.5h3c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5h-3v-3zm3.5 9H10v-3h3.5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5z"/>\
+          <path d="M0 0h24v24H0z" fill="none"/>  </svg>',
+      'backColor': 'highlight',
+      'italic': '<svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"> \
+          <path d="M0 0h24v24H0z" fill="none"/> \
+          <path d="M10 4v3h2.21l-3.42 8H6v3h8v-3h-2.21l3.42-8H18V4z"/> \
+          </svg>',
       'fontName': 'code',
       'strikeThrough': 'format_strikethrough',
       'underline': 'format_underlined',
@@ -208,6 +247,7 @@
   }
   document.addEventListener('contextmenu', function (e) { // function e sam a e =>
   // Prevents right click from default from opening
+    if (!e.ctrlKey){return}
     e.preventDefault()
     openMenu(e);
     return;

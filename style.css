@@ -1,7 +1,6 @@
 
 @import "https://fonts.googleapis.com/icon?family=Material+Icons";
-@import"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js";
-/*@import "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css";*/
+
 .cf-menu {
   position: absolute;
   z-index: 1000000000;
@@ -14,11 +13,11 @@
   width: 100%;
   overflow: auto; /* Overflow due to float */xzz
 }
-
+/*
 .cf-bold{font-weight: bold;}
 .cf-code{ text-transform: capitalize; word-spacing: -5px;font-family: Consolas,"courier new";}
 .cf-italic{font-style: italic;}
-.cf-highlight{  background-color: yellow; opacity: 50}
+.cf-highlight{  background-color: yellow; opacity: 50}*/
 button.btn.btn-info[active = false]{
   /*border-color: grey;
   color:grey;*/
