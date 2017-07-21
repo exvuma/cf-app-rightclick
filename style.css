@@ -4,10 +4,21 @@
 .cf-menu {
   position: absolute;
   z-index: 1000000000;
-  /*padding: inherit;*/
-  box-shadow: -5px 4px 11px 5px rgba(61, 70, 113, 0.5);
-  background: 23123;
+  box-shadow: 0 0 19px rgba(0, 0, 0, 0.34);
+  border: solid 1px rgba(0, 0, 0, 0.45);
 }
+
+.cf-menu .btn {
+  background: #fff;
+  border: none;
+  padding: 6px 8px 5px;
+  border-right: solid 1px #9b9b9b;
+}
+
+.cf-menu .btn:last-child {
+  border-right: none;
+}
+
 /**/
 .cf-menu-bar {
   width: 100%;
