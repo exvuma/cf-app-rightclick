@@ -3,7 +3,7 @@
     "head": [
       {
         "type": "script",
-        "src": "./right-click.js"
+        "src": "./markerupper.js"
       },
       {
         "type": "style",
@@ -44,6 +44,20 @@
               "title": "Justification",
               "type": "boolean",
               "default": true
+            },
+            "backColor": {
+              "title": "Highlight",
+              "type": "boolean",
+              "default": true
+            },
+            "highlightColor": {
+              "title": "Highlight Color",
+              "type": "string",
+              "format": "color",
+              "default": "#f38020",
+              "showIf": {
+                "modifiers.backColor": true
+              }
             }
           }
         }
