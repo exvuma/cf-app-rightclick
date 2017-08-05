@@ -92,6 +92,7 @@
       'justifyRight': '<svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"> \
           <path d="M15 15H3v2h12v-2zm0-8H3v2h12V7zM3 13h18v-2H3v2zm0 8h18v-2H3v2zM3 3v2h18V3H3z"/> \
           <path d="M0 0h24v24H0z" fill="none"/> \
+          // todo: change to actually look into right aligned
       </svg>'
 
     }
@@ -223,10 +224,8 @@
       options[key] = INSTALL_OPTIONS[key]
       Right_Click.options[key] = options[key]
     }
-    // options['backgroundColor'] = '#ffeb3b'
-    //  (document.readyState !== 'loading') {
-      // openMenu('INSTALL')
-    highlightColor = Right_Click.options.modifiers['highlightColor']
+
+    // highlightColor = Right_Click.options.modifiers['highlightColor']
   } else { // Just for when we are development mode from browser to simulate
     var options = {
 
