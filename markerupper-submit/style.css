@@ -1,0 +1,40 @@
+
+@import "https://fonts.googleapis.com/icon?family=Material+Icons";
+
+.cf-menu {
+  position: absolute;
+  z-index: 1000000000;
+  box-shadow: 0 0 19px rgba(0, 0, 0, 0.34);
+  border: solid 1px rgba(0, 0, 0, 0.45);
+}
+
+.cf-menu .btn {
+  background: #fff;
+  border: none;
+  padding: 6px 8px 5px;
+  border-right: solid 1px #9b9b9b;
+}
+
+.cf-menu .btn:last-child {
+  border-right: none;
+}
+
+/**/
+.cf-menu-bar {
+  width: 100%;
+  overflow: auto; /* Overflow due to float */xzz
+}
+/*
+.cf-bold{font-weight: bold;}
+.cf-code{ text-transform: capitalize; word-spacing: -5px;font-family: Consolas,"courier new";}
+.cf-italic{font-style: italic;}
+.cf-highlight{  background-color: yellow; opacity: 50}*/
+button.btn.btn-info[active = false]{
+  /*border-color: grey;
+  color:grey;*/
+}
+
+button.btn.btn-info[active = true]{
+  /*color:black;
+  border-color:black;*/
+}
